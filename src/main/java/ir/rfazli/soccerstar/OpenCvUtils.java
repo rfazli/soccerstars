@@ -18,6 +18,10 @@ public class OpenCvUtils {
     }
 
     public Mat getMat(BufferedImage inImage) {
+
+        if (inImage == null)
+            return null;
+
         byte[] data;
         if (inImage.getRaster().getDataBuffer() instanceof DataBufferByte) {
             data = ((DataBufferByte) inImage.getRaster().getDataBuffer()).getData();
@@ -35,6 +39,10 @@ public class OpenCvUtils {
 
 
     public BufferedImage getImage(Mat m) {
+
+        if (m == null)
+            return null;
+
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if (m.channels() > 1) {
             type = BufferedImage.TYPE_3BYTE_BGR;
@@ -49,6 +57,8 @@ public class OpenCvUtils {
     }
 
     public Mat resize(Mat in, float scale) {
+        if (in == null)
+            return null;
         Mat resizeImage = new Mat();
         Size sz = new Size(in.width() * scale, in.height() * scale);
         Imgproc.resize(in, resizeImage, sz);

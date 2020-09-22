@@ -12,9 +12,10 @@ public class App {
         MyRobot myRobot = new MyRobot();
         OpenCvUtils openCvUtils = new OpenCvUtils();
 
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < 20000; i++) {
             BufferedImage captureScreen = myRobot.captureScreen();
             Mat mat = openCvUtils.getMat(captureScreen);
+            detector.detectGameBoard(mat);
             detector.circles(mat);
             Mat resize = openCvUtils.resize(mat, 0.5f);
             BufferedImage image = openCvUtils.getImage(resize);

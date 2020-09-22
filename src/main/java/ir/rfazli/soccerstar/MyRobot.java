@@ -17,10 +17,18 @@ public class MyRobot {
 
     public BufferedImage captureScreen() throws AWTException {
         Robot robot = new Robot();
-        return robot.createScreenCapture(getWindows());
+        Rectangle windows = getWindows();
+        if (windows != null)
+            return robot.createScreenCapture(windows);
+        else
+            return null;
     }
 
     public void displayImage(Image image) {
+
+        if (image == null)
+            return;
+
         if (frame == null) {
             init(image);
         } else {

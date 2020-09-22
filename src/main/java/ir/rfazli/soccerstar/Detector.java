@@ -8,6 +8,10 @@ import org.opencv.imgproc.Imgproc;
 public class Detector {
 
     public void circles(Mat src) {
+
+        if (src == null)
+            return;
+
         Mat gray = new Mat();
         Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
         Imgproc.medianBlur(gray, gray, 5);
@@ -25,5 +29,17 @@ public class Detector {
             int radius = (int) Math.round(c[2]);
             Imgproc.circle(src, center, radius, new Scalar(255, 0, 255), 3, 8, 0);
         }
+    }
+
+    public void detectGameBoard(Mat src) {
+
+        if (src == null)
+            return;
+
+        int widthStep = (src.width() - 30) / 5;
+        int heightStep = (src.height() - 30) / 6;
+        Point pt1 = new Point(widthStep / 2 + 10, heightStep + 30);
+        Point pt2 = new Point(src.width() - (widthStep / 2) - 50, src.height() - 17);
+        Imgproc.rectangle(src, pt1, pt2, new Scalar(255, 0, 0, .8), 4);
     }
 }
