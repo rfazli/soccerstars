@@ -1,8 +1,12 @@
 package ir.rfazli.soccerstar;
 
+import com.sun.jna.platform.DesktopWindow;
+import com.sun.jna.platform.WindowUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class MyRobot {
     private JFrame frame;
@@ -12,10 +16,8 @@ public class MyRobot {
     }
 
     public BufferedImage captureScreen() throws AWTException {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Rectangle screenRectangle = new Rectangle(0, 20, 1280, 720);
         Robot robot = new Robot();
-        return robot.createScreenCapture(screenRectangle);
+        return robot.createScreenCapture(getWindows());
     }
 
     public void displayImage(Image image) {
@@ -37,5 +39,17 @@ public class MyRobot {
         frame.add(lbl);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public Rectangle getWindows() {
+        Rectangle rect = null;
+        List<DesktopWindow> allWindows = WindowUtils.getAllWindows(true);
+        for (DesktopWindow desktopWindow : allWindows) {
+            if (desktopWindow.getTitle().contains("MEmu")) {
+                rect = desktopWindow.getLocAndSize();
+                break;
+            }
+        }
+        return rect;
     }
 }
