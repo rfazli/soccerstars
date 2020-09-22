@@ -2,7 +2,9 @@ package ir.rfazli.soccerstar;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -44,5 +46,12 @@ public class OpenCvUtils {
         final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(b, 0, targetPixels, 0, b.length);
         return image;
+    }
+
+    public Mat resize(Mat in, float scale) {
+        Mat resizeImage = new Mat();
+        Size sz = new Size(in.width() * scale, in.height() * scale);
+        Imgproc.resize(in, resizeImage, sz);
+        return resizeImage;
     }
 }

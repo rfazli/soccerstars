@@ -13,7 +13,7 @@ public class MyRobot {
 
     public BufferedImage captureScreen() throws AWTException {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Rectangle screenRectangle = new Rectangle(0, 0, 1280, 720);
+        Rectangle screenRectangle = new Rectangle(0, 20, 1280, 720);
         Robot robot = new Robot();
         return robot.createScreenCapture(screenRectangle);
     }

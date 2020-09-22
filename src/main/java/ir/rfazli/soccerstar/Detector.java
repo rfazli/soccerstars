@@ -25,8 +25,5 @@ public class Detector {
             int radius = (int) Math.round(c[2]);
             Imgproc.circle(src, center, radius, new Scalar(255, 0, 255), 3, 8, 0);
         }
-//        HighGui.imshow("detected circles", src);
-//        HighGui.waitKey();
     }
-
 }
