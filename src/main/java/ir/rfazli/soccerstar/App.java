@@ -18,7 +18,7 @@ public class App {
             Mat mat = openCvUtils.getMat(captureScreen);
             Rect rect = detector.detectGameBoard(mat);
             mat = mat.submat(rect.y, rect.y + rect.height, rect.x, rect.x + rect.width);
-            detector.circles(mat, rect);
+            detector.detectMember(mat);
             Mat resize = openCvUtils.resize(mat, 0.5f);
             BufferedImage image = openCvUtils.getImage(resize);
             myRobot.displayImage(image);
