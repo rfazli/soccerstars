@@ -2,12 +2,13 @@ package ir.rfazli.soccerstar;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class Detector {
 
-    public void circles(Mat src) {
+    public void circles(Mat src, Rect rect) {
 
         if (src == null)
             return;
@@ -31,15 +32,16 @@ public class Detector {
         }
     }
 
-    public void detectGameBoard(Mat src) {
+    public Rect detectGameBoard(Mat src) {
 
         if (src == null)
-            return;
+            return null;
 
         int widthStep = (src.width() - 30) / 5;
         int heightStep = (src.height() - 30) / 6;
         Point pt1 = new Point(widthStep / 2 + 10, heightStep + 30);
         Point pt2 = new Point(src.width() - (widthStep / 2) - 50, src.height() - 17);
         Imgproc.rectangle(src, pt1, pt2, new Scalar(255, 0, 0, .8), 4);
+        return new Rect(pt1, pt2);
     }
 }

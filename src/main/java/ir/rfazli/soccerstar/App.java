@@ -2,6 +2,7 @@ package ir.rfazli.soccerstar;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 
 import java.awt.image.BufferedImage;
 
@@ -15,8 +16,9 @@ public class App {
         for (int i = 0; i < 20000; i++) {
             BufferedImage captureScreen = myRobot.captureScreen();
             Mat mat = openCvUtils.getMat(captureScreen);
-            detector.detectGameBoard(mat);
-            detector.circles(mat);
+            Rect rect = detector.detectGameBoard(mat);
+            mat = mat.submat(rect.y, rect.y + rect.height, rect.x, rect.x + rect.width);
+            detector.circles(mat, rect);
             Mat resize = openCvUtils.resize(mat, 0.5f);
             BufferedImage image = openCvUtils.getImage(resize);
             myRobot.displayImage(image);
