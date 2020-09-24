@@ -1,4 +1,4 @@
-package ir.rfazli.soccerstar;
+package ir.rfazli.soccerstar.core;
 
 import com.sun.jna.platform.DesktopWindow;
 import com.sun.jna.platform.WindowUtils;

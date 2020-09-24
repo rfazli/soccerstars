@@ -1,8 +1,6 @@
-package ir.rfazli.soccerstar;
+package ir.rfazli.soccerstar.core;
 
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -37,7 +35,6 @@ public class OpenCvUtils {
         return mat;
     }
 
-
     public BufferedImage getImage(Mat m) {
 
         if (m == null)
@@ -64,4 +61,44 @@ public class OpenCvUtils {
         Imgproc.resize(in, resizeImage, sz);
         return resizeImage;
     }
+
+    public double colorDistance(Scalar c1, Scalar c2) {
+        double r = Math.pow(c1.val[0] - c2.val[0], 2);
+        double g = Math.pow(c1.val[1] - c2.val[1], 2);
+        double b = Math.pow(c1.val[2] - c2.val[2], 2);
+        return Math.pow(r + g + b, 1.0 / 1.3);
+    }
+
+    public double distance(Point a, Point b) {
+        double distance = 0.0;
+
+        if (a != null && b != null) {
+            double xDiff = a.x - b.x;
+            double yDiff = a.y - b.y;
+            distance = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+        }
+        return distance;
+    }
+
+    public Scalar detectColor(Mat src, Point center, int radius) {
+
+        if (src == null)
+            return new Scalar(0, 0, 0);
+
+        radius -= 5;
+        Mat area = src.submat((int) (center.y - radius), (int) (center.y + radius), (int) (center.x - radius), (int) (center.x + radius));
+        double r = 0;
+        double g = 0;
+        double b = 0;
+        double total = area.rows() * area.cols();
+        for (int i = 0; i < area.rows(); i++) {
+            for (int j = 0; j < area.cols(); j++) {
+                r += area.get(i, j)[0];
+                g += area.get(i, j)[1];
+                b += area.get(i, j)[2];
+            }
+        }
+        return new Scalar(r / total, g / total, b / total);
+    }
+
 }

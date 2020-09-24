@@ -1,29 +1,32 @@
 package ir.rfazli.soccerstar;
 
+import ir.rfazli.soccerstar.core.ActAction;
+import ir.rfazli.soccerstar.core.Detector;
+import ir.rfazli.soccerstar.core.MyRobot;
+import ir.rfazli.soccerstar.logic.MyTeamLogic;
+import ir.rfazli.soccerstar.logic.TeamLogic;
+import ir.rfazli.soccerstar.model.Action;
+import ir.rfazli.soccerstar.model.Board;
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
 
 import java.awt.image.BufferedImage;
 
 public class App {
+
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Detector detector = new Detector();
         MyRobot myRobot = new MyRobot();
-        OpenCvUtils openCvUtils = new OpenCvUtils();
+        TeamLogic teamLogic = new MyTeamLogic();
+        ActAction actAction = new ActAction();
 
-        for (int i = 0; i < 20000; i++) {
+        while (true) {
             BufferedImage captureScreen = myRobot.captureScreen();
-            Mat mat = openCvUtils.getMat(captureScreen);
-            Rect rect = detector.detectGameBoard(mat);
-            mat = mat.submat(rect.y, rect.y + rect.height, rect.x, rect.x + rect.width);
-            detector.detectMember(mat);
-            Mat resize = openCvUtils.resize(mat, 0.5f);
-            BufferedImage image = openCvUtils.getImage(resize);
-            myRobot.displayImage(image);
+            Board boardInfo = detector.getBoardInfo(captureScreen);
+            myRobot.displayImage(boardInfo.getImage());
+            Action action = teamLogic.play(boardInfo);
+            actAction.doIt(action);
             Thread.sleep(1000);
         }
-        System.exit(0);
     }
 }
