@@ -18,15 +18,15 @@ public class App {
         Detector detector = new Detector();
         MyRobot myRobot = new MyRobot();
         TeamLogic teamLogic = new MyTeamLogic();
-        ActAction actAction = new ActAction();
+        ActAction actAction = new ActAction(myRobot);
 
         while (true) {
             BufferedImage captureScreen = myRobot.captureScreen();
             Board boardInfo = detector.getBoardInfo(captureScreen);
             myRobot.displayImage(boardInfo.getImage());
             Action action = teamLogic.play(boardInfo);
-            actAction.doIt(action);
-            Thread.sleep(1000);
+            actAction.doIt(action, boardInfo);
+            Thread.sleep(3000);
         }
     }
 }
