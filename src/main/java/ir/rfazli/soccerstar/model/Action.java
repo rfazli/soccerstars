@@ -4,12 +4,12 @@ public class Action {
 
     private int player;
     private int power;
-    private int degree;
+    private float angle;
 
-    public Action(int player, int power, int degree) {
+    public Action(int player, int power, float angle) {
         this.player = player;
         this.power = power;
-        this.degree = degree;
+        this.angle = angle;
     }
 
     public Action() {
@@ -31,11 +31,11 @@ public class Action {
         this.power = power;
     }
 
-    public int getDegree() {
-        return degree;
+    public float getAngle() {
+        return angle;
     }
 
-    public void setDegree(int degree) {
-        this.degree = degree;
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 }

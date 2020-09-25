@@ -101,4 +101,7 @@ public class OpenCvUtils {
         return new Scalar(r / total, g / total, b / total);
     }
 
+    public float getAngle(Point p1, Point p2) {
+        return (float) Math.toDegrees(Math.atan2(p1.y - p2.y, p1.x - p2.x));
+    }
 }
