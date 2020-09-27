@@ -1,8 +1,8 @@
 package ir.rfazli.soccerstar.model;
 
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class Board {
     private List<Point> myTeam;
     private List<Point> secondTeam;
     private Point ball;
-    private BufferedImage image;
+    private Mat image;
 
     public Board() {
         this.myTeam = new ArrayList<>();
@@ -49,11 +49,11 @@ public class Board {
         this.ball = ball;
     }
 
-    public BufferedImage getImage() {
+    public Mat getImage() {
         return image;
     }
 
-    public void setImage(BufferedImage image) {
+    public void setImage(Mat image) {
         this.image = image;
     }
 }

@@ -67,8 +67,9 @@ public class MyRobot {
     }
 
     public void shoot(Point p, Point drag) {
-        if (windowsPosition == null || p == null)
+        if (windowsPosition == null || drag == null || p == null)
             return;
+
         int x = (int) (windowsPosition.getX() + p.x);
         int y = (int) (windowsPosition.getY() + p.y);
         robot.mouseMove(x, y);

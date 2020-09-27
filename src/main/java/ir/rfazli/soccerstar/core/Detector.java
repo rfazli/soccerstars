@@ -23,9 +23,7 @@ public class Detector {
     public Board getBoardInfo(BufferedImage captureScreen) {
         Mat src = openCvUtils.getMat(captureScreen);
         Board boardInfo = this.getBoardInfo(src);
-        Mat resize = openCvUtils.resize(src, 0.5f);
-        BufferedImage image = openCvUtils.getImage(resize);
-        boardInfo.setImage(image);
+        boardInfo.setImage(src);
         return boardInfo;
     }
 

@@ -3,11 +3,13 @@ package ir.rfazli.soccerstar;
 import ir.rfazli.soccerstar.core.ActAction;
 import ir.rfazli.soccerstar.core.Detector;
 import ir.rfazli.soccerstar.core.MyRobot;
+import ir.rfazli.soccerstar.core.OpenCvUtils;
 import ir.rfazli.soccerstar.logic.MyTeamLogic;
 import ir.rfazli.soccerstar.logic.TeamLogic;
 import ir.rfazli.soccerstar.model.Action;
 import ir.rfazli.soccerstar.model.Board;
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import java.awt.image.BufferedImage;
@@ -21,30 +23,33 @@ public class App {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Detector detector = new Detector();
         MyRobot myRobot = new MyRobot();
+        OpenCvUtils openCvUtils = new OpenCvUtils();
         TeamLogic team1 = new MyTeamLogic();
         TeamLogic team2 = new MyTeamLogic();
         ActAction actAction = new ActAction(myRobot);
 
-        while (true) {
+        long c = 0;
+        while (c++ < Long.MAX_VALUE) {
             turn = !turn;
             BufferedImage captureScreen = myRobot.captureScreen();
             Board boardInfo = detector.getBoardInfo(captureScreen);
-            myRobot.displayImage(boardInfo.getImage());
+
             List<Point> turnTeam;
             Action action;
-            boolean direction;
             if (turn) {
-                direction = true;
                 turnTeam = boardInfo.getMyTeam();
                 action = team1.play(turnTeam, boardInfo.getSecondTeam(), boardInfo.getBall());
             } else {
-                direction = false;
                 turnTeam = boardInfo.getSecondTeam();
                 action = team2.play(turnTeam, boardInfo.getMyTeam(), boardInfo.getBall());
             }
+            actAction.doIt(action, turnTeam, boardInfo.getBall(), boardInfo.getImage());
 
-            actAction.doIt(action, turnTeam, boardInfo.getBall(), direction);
-            Thread.sleep(6000);
+            Mat resize = openCvUtils.resize(boardInfo.getImage(), 0.5f);
+            BufferedImage image = openCvUtils.getImage(resize);
+            myRobot.displayImage(image);
+
+            Thread.sleep(3000);
         }
     }
 }

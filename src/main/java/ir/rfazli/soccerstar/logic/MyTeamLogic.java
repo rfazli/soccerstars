@@ -19,9 +19,10 @@ public class MyTeamLogic implements TeamLogic {
         Action action = new Action();
         int player = new Random().nextInt(myTeam.size());
         action.setPlayer(player);
-        action.setPower(200);
+        action.setPower(150);
         float angle = openCvUtils.getAngle(myTeam.get(player), ball);
         action.setAngle(angle);
+
         return action;
     }
 }
