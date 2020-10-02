@@ -104,4 +104,27 @@ public class OpenCvUtils {
     public float getAngle(Point p1, Point p2) {
         return (float) Math.atan2(p1.y - p2.y, p1.x - p2.x);
     }
+
+    public double similarity(Mat t1, Mat t2) {
+        int same = 0;
+        for (int i = 0; i < t1.rows(); i++) {
+            for (int j = 0; j < t1.cols(); j++) {
+                if (distance(t1.get(i, j), t2.get(i, j)) < 1)
+                    same++;
+            }
+        }
+        return (double) same / (double) (t1.rows() * t1.cols());
+    }
+
+    public double distance(double[] a, double[] b) {
+        double distance = 0.0;
+
+        if (a != null && b != null) {
+            double xDiff = a[0] - b[0];
+            double yDiff = a[1] - b[1];
+            double zDiff = a[2] - b[2];
+            distance = Math.pow(Math.pow(xDiff, 2) + Math.pow(yDiff, 2) + Math.pow(zDiff, 2), 1.0 / 3.0);
+        }
+        return distance;
+    }
 }

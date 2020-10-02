@@ -15,25 +15,34 @@ public class Detector {
 
     private Scalar myTeamColor;
     private OpenCvUtils openCvUtils;
+    private MyRobot myRobot;
 
-    public Detector() {
+    public Detector(MyRobot myRobot) {
         this.openCvUtils = new OpenCvUtils();
+        this.myRobot = myRobot;
     }
 
-    public Board getBoardInfo(BufferedImage captureScreen) {
+    public Board getBoardInfo() {
+        BufferedImage captureScreen = myRobot.captureScreen();
         Mat src = openCvUtils.getMat(captureScreen);
+
+        if (src == null)
+            return null;
+
         Board boardInfo = this.getBoardInfo(src);
         boardInfo.setImage(src);
         return boardInfo;
     }
 
     private Board getBoardInfo(Mat src) {
+        Board boardInfo = new Board();
 
         Rect gameBoardRec = this.detectGameBoard(src);
+        int turn = this.detectTurn(src, gameBoardRec);
         Mat player = detectPlayer(src, gameBoardRec);
         Mat ball = detectBall(src, gameBoardRec);
 
-        Board boardInfo = new Board();
+        boardInfo.setTurn(turn);
         Scalar ballColor = new Scalar(0, 255, 255);
         Point boardBoardCenter = new Point(gameBoardRec.width / 2, gameBoardRec.height / 2);
 
@@ -139,4 +148,40 @@ public class Detector {
         return new Rect(pt1, pt2);
     }
 
+    private int detectTurn(Mat src, Rect gameBoardRec) {
+        Point pt1 = gameBoardRec.tl();
+        Point pt2 = gameBoardRec.br();
+
+        Rect t1 = new Rect(new Point(0, 0), pt1);
+        Rect t2 = new Rect(new Point(pt2.x, pt1.y), new Point(pt2.x + pt1.x, 0));
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        BufferedImage captureScreen = myRobot.captureScreen();
+        Mat src2 = openCvUtils.getMat(captureScreen);
+
+        Mat t11 = src.submat(t1.y, t1.y + t1.height, t1.x, t1.x + t1.width);
+        Mat t12 = src2.submat(t1.y, t1.y + t1.height, t1.x, t1.x + t1.width);
+        Mat t21 = src.submat(t2.y, t2.y + t2.height, t2.x, t2.x + t2.width);
+        Mat t22 = src2.submat(t2.y, t2.y + t2.height, t2.x, t2.x + t2.width);
+
+        double sim1 = openCvUtils.similarity(t11, t12);
+        double sim2 = openCvUtils.similarity(t21, t22);
+
+        int turn = 0;
+        if (sim1 > sim2) {
+            turn = 1;
+        } else if (sim2 > sim1) {
+            turn = 2;
+        }
+
+        Imgproc.rectangle(src, t1.tl(), t1.br(), new Scalar(255, 0, 0, .8), turn == 1 ? Imgproc.FILLED : Imgproc.LINE_4);
+        Imgproc.rectangle(src, t2.tl(), t2.br(), new Scalar(255, 0, 0, .8), turn == 2 ? Imgproc.FILLED : Imgproc.LINE_4);
+
+        return turn;
+    }
 }

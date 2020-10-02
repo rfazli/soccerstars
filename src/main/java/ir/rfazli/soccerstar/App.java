@@ -5,6 +5,7 @@ import ir.rfazli.soccerstar.core.Detector;
 import ir.rfazli.soccerstar.core.MyRobot;
 import ir.rfazli.soccerstar.core.OpenCvUtils;
 import ir.rfazli.soccerstar.logic.MyTeamLogic;
+import ir.rfazli.soccerstar.logic.SecondTeamLogic;
 import ir.rfazli.soccerstar.logic.TeamLogic;
 import ir.rfazli.soccerstar.model.Action;
 import ir.rfazli.soccerstar.model.Board;
@@ -17,31 +18,29 @@ import java.util.List;
 
 public class App {
 
-    private static boolean turn = true;
-
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Detector detector = new Detector();
         MyRobot myRobot = new MyRobot();
+        Detector detector = new Detector(myRobot);
         OpenCvUtils openCvUtils = new OpenCvUtils();
         TeamLogic team1 = new MyTeamLogic();
-        TeamLogic team2 = new MyTeamLogic();
+        TeamLogic team2 = new SecondTeamLogic();
         ActAction actAction = new ActAction(myRobot);
 
         long c = 0;
         while (c++ < Long.MAX_VALUE) {
-            turn = !turn;
-            BufferedImage captureScreen = myRobot.captureScreen();
-            Board boardInfo = detector.getBoardInfo(captureScreen);
+            Board boardInfo = detector.getBoardInfo();
 
             List<Point> turnTeam;
             Action action;
-            if (turn) {
+            if (boardInfo.getTurn() == 1) {
                 turnTeam = boardInfo.getMyTeam();
                 action = team1.play(turnTeam, boardInfo.getSecondTeam(), boardInfo.getBall());
-            } else {
+            } else if (boardInfo.getTurn() == 2) {
                 turnTeam = boardInfo.getSecondTeam();
                 action = team2.play(turnTeam, boardInfo.getMyTeam(), boardInfo.getBall());
+            } else {
+                continue;
             }
             actAction.doIt(action, turnTeam, boardInfo.getBall(), boardInfo.getImage());
 

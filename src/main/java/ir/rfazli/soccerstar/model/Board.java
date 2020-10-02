@@ -11,6 +11,7 @@ public class Board {
     private List<Point> secondTeam;
     private Point ball;
     private Mat image;
+    private int turn;
 
     public Board() {
         this.myTeam = new ArrayList<>();
@@ -55,5 +56,13 @@ public class Board {
 
     public void setImage(Mat image) {
         this.image = image;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 }
